@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .success-message, .registration-success {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .go-back-button {
+            margin-top: 10px;
+            background-color: #fff;
+            color: #3498db;
+            padding: 10px;
+            border: 1px solid #3498db;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container" id="loginForm">
+    <h2>Login</h2>
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="Enter your username">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter your password">
+
+    <button onclick="validateLogin()">Sign In</button>
+
+    <p>Don't have an account? <a href="#" onclick="toggleForm()">Register</a></p>
+
+    <div class="success-message" id="loginSuccessMessage">Login Successful!</div>
+</div>
+
+<div class="form-container" id="registerForm" style="display: none;">
+    <h2>Register</h2>
+    <label for="newUsername">New Username:</label>
+    <input type="text" id="newUsername" placeholder="Choose a username">
+
+    <label for="newPassword">New Password:</label>
+    <input type="password" id="newPassword" placeholder="Choose a password">
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" placeholder="Enter your email">
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" placeholder="Enter your first name">
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" placeholder="Enter your last name">
+
+    <button onclick="validateRegistration()">Register</button>
+
+    <p>Already have an account? <a href="#" onclick="toggleForm()">Sign In</a></p>
+
+    <div class="registration-success" id="registrationSuccessMessage">
+        <p>Registration Complete!</p>
+        <button class="go-back-button" onclick="goBackToSignIn()">Go Back to Sign In</button>
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        loginForm.style.display = (loginForm.style.display === 'none') ? 'block' : 'none';
+        registerForm.style.display = (registerForm.style.display === 'none') ? 'block' : 'none';
+
+        
+        document.getElementById('loginSuccessMessage').style.display = 'none';
+        document.getElementById('registrationSuccessMessage').style.display = 'none';
+    }
+
+function validateLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    if (!username || !password) {
+        alert('Please fill in both username and password.');
+        return;
+    }
+
+    // Retrieve registered details from sessionStorage
+    const registeredUsername = sessionStorage.getItem('username');
+    const registeredPassword = sessionStorage.getItem('password');
+
+    if (username === registeredUsername && password === registeredPassword) {
+        // Credentials match, proceed to user-info.html
+        window.location.href = 'user-info.html';
+    } else {
+        // Incorrect credentials
+        alert('Invalid username or password. Please try again.');
+    }
+}
+    
+
+    function validateRegistration() {
+    const newUsername = document.getElementById('newUsername').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const email = document.getElementById('email').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+
+    if (!newUsername || !newPassword || !email || !firstName || !lastName) {
+        alert('Please fill in all registration fields.');
+        return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+        alert('Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long.');
+        return;
+    }
+
+    sessionStorage.setItem('username', newUsername);
+    sessionStorage.setItem('password', newPassword);
+    sessionStorage.setItem('email', email);
+    sessionStorage.setItem('firstName', firstName);
+    sessionStorage.setItem('lastName', lastName);
+
+    document.getElementById('registrationSuccessMessage').style.display = 'block';
+}
+
+    function goBackToSignIn() {
+        toggleForm();
+    }
+    
+
+    function isValidEmail(email) {
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+</script>
+
+</body>
+</html>
